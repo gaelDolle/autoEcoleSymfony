@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Register' %}
+
+{% block body %}
+<main class="row justify-content-center">
+    <div class="col-sm-6">
+
+        <h1>Inscription</h1>
+
+        {{ form_start(form) }}
+
+        {{ form_widget(form) }}
+        
+        <button class="btn btn-lg btn-info my-2 btn-block" type="submit">
+            S'inscrire
+        </button>
+
+        {{ form_end(form) }}
+
+        <div class="text-right my-2">
+            <a href="{{ path('app_login') }}">
+                <button class="btn btn-sm btn-dark">
+                    Retour Connexion
+                </button>
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}
