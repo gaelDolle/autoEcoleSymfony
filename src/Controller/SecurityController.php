@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Instructor;
 use App\Entity\User;
 use App\Form\RegisterType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,9 +22,9 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        if ($this->getUser()) {
+            return $this->redirectToRoute('easyadmin');
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -38,24 +39,24 @@ class SecurityController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, LoginFormAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler): Response
     {
-        $user = new User();
+        $instructor = new Instructor();
 
-        $form = $this->createForm(RegisterType::class, $user);
+        $form = $this->createForm(RegisterType::class, $instructor);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
+            $password = $passwordEncoder->encodePassword($instructor, $instructor->getPassword());
+            $instructor->setPassword($password);
 
             //save the User
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
+            $em->persist($instructor);
             $em->flush();
 
             //Connexion de User
             return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
+                $instructor,
                 $request,
                 $authenticator,
                 'main' // firewall name in security.yaml

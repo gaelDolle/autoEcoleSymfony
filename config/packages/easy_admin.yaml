@@ -1,6 +1,72 @@
-#easy_admin:
-#    entities:
-#        # List the entity class name you want to manage
-#        - App\Entity\Product
-#        - App\Entity\Category
-#        - App\Entity\User
+easy_admin:
+  site_name: 'Auto-Ecole - Vroum'
+  user:
+    display_name: false
+    display_avatar: true
+  design:
+    menu:
+      - { label: 'Appli Mobile' }
+      - { entity: 'AppUser', label: 'Utilisateurs', icon: 'user' }
+      - { entity: 'Questionnaire', label: 'Questionnaires', icon: 'book' }
+      - { entity: 'Question', label: 'Questions', icon: 'book' }
+      - { label: 'Instructeurs' }
+      - { entity: 'Instructor', label: 'Instructeurs', icon: 'user' }
+    form_theme:
+      - '@EasyAdmin/form/bootstrap_4.html.twig'
+      - '@VichUploader/Form/fields.html.twig'
+
+  list:
+    actions:
+      # hides the action label and displays only the icon
+      - { name: 'new', icon: 'file', label: 'Nouveau' }
+      - { name: 'edit', icon: 'pencil', label: 'Modifier' }
+      - { name: 'delete', icon: 'trash', label: 'Suppr' }
+  formats:
+    datetime: 'd/m/Y à H:i'
+
+  entities:
+    Instructor:
+      class: App\Entity\Instructor
+      list:
+        fields:
+          [
+            'id',
+            'email',
+            { property: 'roles', label: 'Roles', type: 'json_array' },
+          ]
+    AppUser:
+      class: App\Entity\AppUser
+      list:
+        fields: ['id', 'email', 'password']
+    Questionnaire:
+      class: App\Entity\Questionnaire
+      list:
+        fields: ['id', 'name']
+      form:
+        fields: ['name', 'questions']
+    Question:
+      class: App\Entity\Question
+      list:
+        fields:
+          [
+            'id',
+            'questionnaire',
+            {
+              property: 'img',
+              type: 'image',
+              base_path: '%app.path.question_images%',
+            },
+            'text',
+          ]
+      form:
+        fields:
+          [
+            'questionnaire',
+            { property: 'imageFile', type: 'vich_image', label: 'Image' },
+            'text',
+            'rep1',
+            'rep2',
+            'rep3',
+            'rep4',
+            'repOk',
+          ]

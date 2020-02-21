@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\Entity\User;
+use App\Entity\Instructor;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,14 +65,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $instructor = $this->entityManager->getRepository(Instructor::class)->findOneBy(['email' => $credentials['email']]);
 
-        if (!$user) {
+        if (!$instructor) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
 
-        return $user;
+        return $instructor;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -95,7 +95,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         }
 
         //Accès au BackOffice
-        return new RedirectResponse($this->urlGenerator->generate('app_admin'));
+        return new RedirectResponse($this->urlGenerator->generate('easyadmin'));
         
     }
 
